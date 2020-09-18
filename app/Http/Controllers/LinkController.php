@@ -85,28 +85,21 @@ class LinkController extends Controller
         $link->save();
         return redirect()->route('links.index')->with('Success', 'Link "'.$link->link.'" successfully updated');
     }
-    public function goToPage(\App\Models\Link $page)
+    public function goToPage (\App\Models\Link $page)
     {
-        $statistic = new \App\Models\Statistic;
-        $statistic->id=\Ramsey\Uuid\Uuid::uuid4()->toString();
-        $statistic->user_id=\request()->user()->id;
-        $statistic->link_id=$page->id;
-        $statistic->user_agent=\request()->userAgent();
-        $statistic->ip=\request()->ip();
-        //$statistic->save();
-        //dd($statistic);
-        dispatch(new \App\Jobs\VisitorToStatistic($statistic))->onQueue('default');
-        //onQueue('addStatistic');
-        //if ($link = \App\Models\Link::where('shortlink',$page)->first())
-        //{
-        //    $href = $link->link;
-        //}
-        //else
-        //{
-        //    $href='/';
-        //}
-        //return redirect($href);
+        $data = [
+            'id'=>\Ramsey\Uuid\Uuid::uuid4()->toString(),
+            'user_id' => \request()->user()->id,
+            'link_id' => $page->id,
+            'ip' => \request()->ip(),
+            'user_agent'=> \request()->userAgent(),
+            'created_at'=> now(),
+            'updated_at'=> now(),
+        ];
+        dispatch(new \App\Jobs\VisitorToStatistic($data))->onQueue('default');
+        return redirect($page->link);
     }
+
     public function show(\App\Models\Link $link)
     {
         return view('links.show',['link'=>$link]);

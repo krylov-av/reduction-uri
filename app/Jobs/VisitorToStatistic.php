@@ -12,7 +12,7 @@ class VisitorToStatistic implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $statistic;
+    private $data;
     /**
      * Create a new job instance.
      *
@@ -20,10 +20,9 @@ class VisitorToStatistic implements ShouldQueue
      */
     //public function __construct(\App\Models\Statistic $statistic)
     // We can't use this because this record is not stored in database
-    public function __construct($statistic)
+    public function __construct(array $data)
     {
-        //dd($statistic);
-        $this->statistic = $statistic;
+        $this->data = $data;
     }
 
     /**
@@ -33,10 +32,12 @@ class VisitorToStatistic implements ShouldQueue
      */
     public function handle()
     {
-        //print $this->statistic->id;
-        echo "123";
-        //print "123";
-        //var_dump("executing");
-        //print_r($this->statistic);
+        $statistic = new \App\Models\Statistic;
+        //This works, because all fields are fillable
+        $statistic->fill($this->data);
+        $statistic->save();
+        $link = \App\Models\Link::find($this->data['link_id']);
+        $link->count++;
+        $link->save();
     }
 }

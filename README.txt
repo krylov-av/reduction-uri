@@ -37,25 +37,22 @@ stop job = Ctrl + C
 run job with logs
 php artisan queue:work --queue=default > storage/logs/jobs.log &
 
+Also, we can run workers at night and calculate statistic at night,
+when our users are out of work.
 
-################################################
-1. входим в систему на страничке /login
-2. Если все удачно, нас должно перенаправить на страничку links
-3. Если засеили базу на шаге 5, то можем нажать на краткую ссылку
-    Нас не перенаправит никуда, чтобы можно было дебажить сервис одним нажатием (F5)
-4. отрабатывает контроллер App\Http\Controllers\LinkController
-    метод goToPage
-    по идее он должен положить в очередь объект ( он туда попадает)
-    дальше job должна выполнить код print "123";
-    но в табличке failed_jobs появляется ошибка
-
-Illuminate\Database\Eloquent\ModelNotFoundException: No query results for model [App\Models\Statistic]. in /src/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php:480
-Stack trace:
-#0 /src/vendor/laravel/framework/src/Illuminate/Queue/SerializesAndRestoresModelIdentifiers.php(102): Illuminate\Database\Eloquent\Builder->firstOrFail()
-#1 /src/vendor/laravel/framework/src/Illuminate/Queue/SerializesAndRestoresModelIdentifiers.php(57): App\Jobs\VisitorToStatistic->restoreModel(Object(Illuminate\Contracts\Database\ModelIdentifier))
-.....
+################################################################################
+##   Many Thanks to Stanislav Protasevich for helping to create this project  ##
+################################################################################
 
 
+
+
+
+
+
+
+Other info.
+==================================
 
 #Make cv like
 https://si-dev.com/
